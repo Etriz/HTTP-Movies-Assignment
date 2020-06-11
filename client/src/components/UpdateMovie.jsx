@@ -12,10 +12,12 @@ const UpdateMovie = ({ movies, getMovieList }) => {
     metascore: "",
     stars: [],
   });
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
@@ -25,12 +27,15 @@ const UpdateMovie = ({ movies, getMovieList }) => {
         getMovieList();
         push("/");
       })
-      .catch((err) => console.log("update submit", err.message, err.response));
+      .catch((err) => {
+        // console.log("update submit", err.message, err.response);
+        setError("All fields must be filled in");
+      });
   };
   useEffect(
     () => {
       const movieData = movies.find((item) => item.id === Number(params.id));
-      console.log(movieData);
+      // console.log(movieData);
       setFormState(movieData);
     },
     //eslint-disable-next-line
@@ -90,6 +95,7 @@ const UpdateMovie = ({ movies, getMovieList }) => {
         </p>
         <button>Update!</button>
       </form>
+      <p>{error}</p>
     </div>
   );
 };
